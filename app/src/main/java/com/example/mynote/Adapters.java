@@ -1,18 +1,18 @@
 package com.example.mynote;
-
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
-import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.ArrayList;
 
 public class Adapters extends RecyclerView.Adapter<Adapters.ViewHolders>{
    OnItemClickListeners onitemccl;
-   public Adapters(OnItemClickListeners onitemccl){
+   ArrayList<Data> noteList;
+   public Adapters(OnItemClickListeners onitemccl,ArrayList<Data> noteList){
         this.onitemccl= onitemccl;
+        this.noteList= noteList;
     }
     @Override
     public Adapters.ViewHolders onCreateViewHolder( ViewGroup parent, int viewType) {
@@ -23,13 +23,14 @@ public class Adapters extends RecyclerView.Adapter<Adapters.ViewHolders>{
 
     @Override
     public void onBindViewHolder( Adapters.ViewHolders holder, int position) {
-       holder.titletext.setText("Hello ");
-       holder.descriptionText.setText("This Is Description");
+       Data data = noteList.get(position);
+       holder.titletext.setText(data.getNoteTitle());
+       holder.descriptionText.setText(data.getNoteData());
     }
 
     @Override
     public int getItemCount() {
-        return 1;
+        return noteList.size();
     }
 
     class ViewHolders extends RecyclerView.ViewHolder implements View.OnClickListener{
@@ -38,8 +39,8 @@ public class Adapters extends RecyclerView.Adapter<Adapters.ViewHolders>{
             super(itemView);
             titletext = itemView.findViewById(R.id.titletext);
             descriptionText = itemView.findViewById(R.id.description);
+            itemView.setOnClickListener(this);
         }
-
         @Override
         public void onClick(View v) {
             onitemccl.onItemClick(getAdapterPosition());

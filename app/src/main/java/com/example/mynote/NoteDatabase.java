@@ -1,7 +1,9 @@
 package com.example.mynote;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -32,8 +34,7 @@ public class NoteDatabase {
 
         @Override
         public void onCreate(SQLiteDatabase db) {
-            String sqlQuery = "CREATE TABLE " + tableName + "(" + idColumn + " INTEGER PRIMARY KEY AUTOINCREMENT," + titleColumn + " TEXT NOT NULL," + noteDataColumn + "" +
-                    "TEXT NOT NULL);";
+            String sqlQuery = "CREATE TABLE " + tableName + "(" + idColumn + " INTEGER PRIMARY KEY AUTOINCREMENT," + titleColumn + " TEXT NOT NULL," + noteDataColumn + " TEXT NOT NULL);";
             db.execSQL(sqlQuery);
         }
 
@@ -47,10 +48,13 @@ public class NoteDatabase {
         dbhelper = new DatabaseHelper(ourContext);
         sqLiteDatabase = dbhelper.getWritableDatabase();
     }
-    public long doentry(){
-   return (0);
+    public long doentry(String title, String description){
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(titleColumn,title);
+        contentValues.put(noteDataColumn,description);
+        return sqLiteDatabase.insert(tableName,null,contentValues);
     }
-    public ArrayList<Data> getData(){
+    public ArrayList<Data> getData() throws SQLException {
         data = new ArrayList();
         String [] columns = {idColumn,titleColumn,noteDataColumn};
        Cursor cursor = sqLiteDatabase.query(tableName,columns,null,null,null,null,null);
@@ -66,4 +70,17 @@ public class NoteDatabase {
         }
        return  data;
     }
+    public int delete(int id){
+          return sqLiteDatabase.delete(tableName,idColumn+"=?",new String[]{id+""});
+    }
+    public int updateData(int id ,String title ,String description){
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(titleColumn,title);
+        contentValues.put(noteDataColumn,description);
+        return sqLiteDatabase.update(tableName,contentValues,idColumn+"=?",new String[]{id+""});
+    }
+    public void closeConnection(){
+        sqLiteDatabase.close();
+    }
+
 }

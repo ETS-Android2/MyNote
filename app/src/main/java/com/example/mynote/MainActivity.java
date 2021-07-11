@@ -29,16 +29,27 @@ public class MainActivity extends AppCompatActivity implements Adapters.OnItemCl
         setSupportActionBar(toolbar);
         toolbar.setTitle("My Notes");
         recyclerView= findViewById(R.id.note_container);
-        recyclerView.setAdapter(new Adapters(this));
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
+        dataRetrive();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        dataRetrive();
+    }
+
+    void dataRetrive(){
+        NoteDatabase noteDatabase = new NoteDatabase(this);
+        noteDatabase.openConnection();
+        noteList = noteDatabase.getData();
+        noteDatabase.closeConnection();
+        recyclerView.setAdapter(new Adapters(this,noteList));
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu,menu);
         return super.onCreateOptionsMenu(menu);
-
     }
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item){
@@ -54,9 +65,13 @@ public class MainActivity extends AppCompatActivity implements Adapters.OnItemCl
         }
         return super.onOptionsItemSelected(item);
     }
-
     @Override
     public void onItemClick(int position) {
-
+        Data data = noteList.get(position);
+       Intent intent = new Intent(this,NoteShow.class);
+       intent.putExtra("titleText",data.getNoteTitle());
+       intent.putExtra("id",data.getId());
+       intent.putExtra("Description",data.getNoteData());
+       startActivity(intent);
     }
 }
