@@ -2,10 +2,14 @@ package com.example.mynote;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public class Adapters extends RecyclerView.Adapter<Adapters.ViewHolders>{
    OnItemClickListeners onitemccl;
@@ -26,8 +30,17 @@ public class Adapters extends RecyclerView.Adapter<Adapters.ViewHolders>{
        Data data = noteList.get(position);
        holder.titletext.setText(data.getNoteTitle());
        holder.descriptionText.setText(data.getNoteData());
+       holder.views.setBackgroundColor(holder.itemView.getResources().getColor(getBackColor()));
     }
-
+     private int getBackColor(){
+            List<Integer> colorList = new ArrayList<>();
+            colorList.add(R.color.red);
+            colorList.add(R.color.blue_dark);
+            colorList.add(R.color.turmarik);
+            colorList.add(R.color.grean_Dark);
+         Random r = new Random();
+       return colorList.get(r.nextInt(colorList.size()));
+     }
     @Override
     public int getItemCount() {
         return noteList.size();
@@ -35,10 +48,12 @@ public class Adapters extends RecyclerView.Adapter<Adapters.ViewHolders>{
 
     class ViewHolders extends RecyclerView.ViewHolder implements View.OnClickListener{
        TextView titletext,descriptionText;
+       LinearLayout views;
        public ViewHolders( View itemView) {
             super(itemView);
             titletext = itemView.findViewById(R.id.titletext);
             descriptionText = itemView.findViewById(R.id.description);
+            views = itemView.findViewById(R.id.notegrid);
             itemView.setOnClickListener(this);
         }
         @Override
