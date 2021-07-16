@@ -3,84 +3,80 @@ package com.example.mynote;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class NoteDatabase {
-    public static   final String noteDataColumn ="NoteData";
-    public static  final  String titleColumn = "Title";
-    public static final String idColumn = "Id";
-   private static final String tableName ="NoteTable";
-    private Context ourContext;
-    private final String databaseName ="NoteDatabase";
-    private final static int databaseVersion = 1;
-    DatabaseHelper dbhelper;
-    ArrayList<Data>  data;
+    private final String tableName ="noteTable";
+    public final String titleColumn ="titleColumn";
+    public final String descriptionColumn ="descriptionColumn";
+    private final String idColumn = "id";
+    private final int databaseVersion = 1;
+    private final String dataBaseName = "NoteDatabase";
     SQLiteDatabase sqLiteDatabase;
+    DatabaseHelper databaseHelper;
+    Context context;
     NoteDatabase(Context context){
-        ourContext = context;
-    }
-    class DatabaseHelper extends SQLiteOpenHelper {
-
-        public DatabaseHelper(@Nullable Context context) {
-            super(context, databaseName, null, databaseVersion);
+        this.context= context;
         }
-
-        @Override
-        public void onCreate(SQLiteDatabase db) {
-            String sqlQuery = "CREATE TABLE " + tableName + "(" + idColumn + " INTEGER PRIMARY KEY AUTOINCREMENT," + titleColumn + " TEXT NOT NULL," + noteDataColumn + " TEXT NOT NULL);";
-            db.execSQL(sqlQuery);
-        }
-
-        @Override
-        public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-            db.execSQL("DROP TABLE IF EXISTS " + tableName);
-            onCreate(db);
-        }
-    }
     public void openConnection(){
-        dbhelper = new DatabaseHelper(ourContext);
-        sqLiteDatabase = dbhelper.getWritableDatabase();
+        databaseHelper = new DatabaseHelper(context);
+        sqLiteDatabase = databaseHelper.getWritableDatabase();
     }
-    public long doentry(String title, String description){
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(titleColumn,title);
-        contentValues.put(noteDataColumn,description);
-        return sqLiteDatabase.insert(tableName,null,contentValues);
-    }
-    public ArrayList<Data> getData() throws SQLException {
-        data = new ArrayList();
-        String [] columns = {idColumn,titleColumn,noteDataColumn};
-       Cursor cursor = sqLiteDatabase.query(tableName,columns,null,null,null,null,null);
-       int idIndex = cursor.getColumnIndex(idColumn);
-       int titleIndex = cursor.getColumnIndex(titleColumn);
-       int dIndex = cursor.getColumnIndex(noteDataColumn);
-       for(cursor.moveToFirst();!cursor.isAfterLast();cursor.moveToNext()){
-            Data note = new Data();
-            note.setId(cursor.getInt(idIndex));
-            note.setNoteTitle(cursor.getString(titleIndex));
-            note.setNoteData(cursor.getString(dIndex));
-            data.add(note);
-        }
-       return  data;
-    }
-    public int delete(int id){
-          return sqLiteDatabase.delete(tableName,idColumn+"=?",new String[]{id+""});
-    }
-    public int updateData(int id ,String title ,String description){
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(titleColumn,title);
-        contentValues.put(noteDataColumn,description);
-        return sqLiteDatabase.update(tableName,contentValues,idColumn+"=?",new String[]{id+""});
-    }
-    public void closeConnection(){
-        sqLiteDatabase.close();
-    }
+   class DatabaseHelper extends SQLiteOpenHelper{
 
+       public DatabaseHelper(@Nullable Context context) {
+           super(context, dataBaseName, null, databaseVersion);
+       }
+
+       @Override
+       public void onCreate(SQLiteDatabase db) {
+           String query = "CREATE TABLE "+tableName+"("+idColumn+" INTEGER PRIMARY KEY AUTOINCREMENT, "+titleColumn+
+                   " TEXT NOT NULL,"+descriptionColumn+" TEXT NOT NULL);";
+           db.execSQL(query);
+       }
+
+       @Override
+       public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+           db.execSQL("DROP TABLE IF EXISTS "+tableName);
+           onCreate(db);
+       }
+   }
+     public long doEntery(String text,String title){                                                 // for Entry Purpose
+         ContentValues contentValues = new ContentValues();
+         contentValues.put(titleColumn,title);
+         contentValues.put(descriptionColumn,text);
+        return sqLiteDatabase.insert(tableName,null,contentValues);
+
+     }
+     public void updateData(String text , String title, int id){                                     // for Update Data
+         ContentValues contentValues = new ContentValues();
+         contentValues.put(titleColumn,title);
+         contentValues.put(descriptionColumn,text);
+         sqLiteDatabase.update(tableName,contentValues,idColumn+"=?",new String[]{id+""});
+     }
+     public long deleteData(int id ){                                                                // for Delate Data;
+       return  sqLiteDatabase.delete(tableName,idColumn+"=?",new String[]{id+""});
+    }
+    public ArrayList<Note> getData(){
+          ArrayList<Note> noteList = new ArrayList<>();
+          String [] columns = {titleColumn,idColumn,descriptionColumn};
+        Cursor cursor = sqLiteDatabase.query(tableName,columns,null,null,null,null,null);
+        int titleIndex = cursor.getColumnIndex(titleColumn);
+        int descriptionIndex = cursor.getColumnIndex(descriptionColumn);
+        int idIndex = cursor.getColumnIndex(idColumn);
+         for(cursor.moveToFirst();!cursor.isAfterLast();cursor.moveToNext())
+        {
+             Note note = new Note();
+             note.setTitle(cursor.getString(titleIndex));
+             note.setDescription(cursor.getString(descriptionIndex));
+             note.setId(cursor.getInt(idIndex));
+             noteList.add(note);
+        }
+         return noteList;
+    }
 }

@@ -1,31 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:title="General">
-        <menu>
+    <item android:title="General" >
+        <menu >
             <item
-                android:id="@+id/notes"
-                android:title="Notes" />
+                android:id="@+id/settings"
+                android:title="Setting" />
             <item
-                android:id="@+id/addNote"
-                android:title="Add Note" />
-            <item android:title="Sync"
-                android:id="@+id/sync"/>
+                android:id="@+id/deleteNotes"
+                android:title="Delete Notes" />
         </menu>
     </item>
-    <item android:title="Support US">
-        <menu>
-            <item android:title="Rate Us"
-                android:id="@+id/rateus"/>
-            <item android:title="Share App"
-                android:id="@+id/shareapp"/>
-        </menu>
-    </item>
-    <item android:title="Account">
-        <menu>
+    <item android:title="Support">
+        <menu >
             <item
-                android:id="@+id/logout"
-                android:title="Log Out" />
+                android:id="@+id/rateus"
+                android:title="Rate Us" />
         </menu>
     </item>
 </menu>

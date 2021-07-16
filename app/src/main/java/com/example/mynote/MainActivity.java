@@ -14,101 +14,61 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Adapter;
 import android.widget.Toast;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
 
 
-public class MainActivity extends AppCompatActivity implements Adapters.OnItemClickListeners , NavigationView.OnNavigationItemSelectedListener{
+public class MainActivity extends AppCompatActivity implements Adapters.OnItemListener {
    Toolbar toolbar;
-   RecyclerView recyclerView;
-   ArrayList<Data> noteList;
+   NavigationView navView;
    DrawerLayout drawerLayout;
    ActionBarDrawerToggle toggle;
-   NavigationView navigationView;
+   FloatingActionButton fab;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
         toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        toolbar.setTitle("My Notes");
-        recyclerView= findViewById(R.id.note_container);
-        drawerLayout = findViewById(R.id.drawerLayout);
-        navigationView = findViewById(R.id.navHeader);
-        navigationView.setNavigationItemSelectedListener(this);
+       setSupportActionBar(toolbar);
+       getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        navView = findViewById(R.id.navView);
+        drawerLayout = findViewById(R.id.mainDrawer);
         toggle= new ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.open,R.string.close);
-        drawerLayout.addDrawerListener(toggle);
-        toggle.setDrawerIndicatorEnabled(true);
         toggle.syncState();
-        dataRetrive();
+        fab = findViewById(R.id.floatingActionButton);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragmentcontationer,new NoteEditFragment()).addToBackStack(null).commit();
+                fab.setVisibility(View.INVISIBLE);
+            }
+        });
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragmentcontationer,new MainFragment(this)).commit();
+    }
+
+    @Override
+    public void onItenListen(Note note) {
+          // Start Work From Here
+        Bundle bundle = new Bundle();
+        bundle.putString("title",note.getTitle());
+        bundle.putString("descrip",note.getDescription());
+        bundle.putInt("id",note.getId());
+        NoteEditFragment ntef= new NoteEditFragment();
+        ntef.setArguments(bundle);
+        fab.setVisibility(View.INVISIBLE);
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragmentcontationer,ntef).addToBackStack(null).commit();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        dataRetrive();
+        fab.setVisibility(View.VISIBLE);
     }
 
-    void dataRetrive(){
-        NoteDatabase noteDatabase = new NoteDatabase(this);
-        noteDatabase.openConnection();
-        noteList = noteDatabase.getData();
-        noteDatabase.closeConnection();
-        recyclerView.setAdapter(new Adapters(this,noteList));
-        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL));
-    }
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main_menu,menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item){
-        int id = item.getItemId();
-        if(id==R.id.settings){
-            Toast.makeText(this, "You Pressed Setting Icon ", Toast.LENGTH_SHORT).show();
-        }
-        else if(id==R.id.search){
-            Toast.makeText(this, "Tou Pressed Search Icon ", Toast.LENGTH_SHORT).show();
-        }else if(id==R.id.addnote){
-            Intent intent = new Intent(this,AddNoteActivity.class);
-            startActivity(intent);
-        }
-        return super.onOptionsItemSelected(item);
-    }
-    @Override
-    public void onItemClick(int position) {
-        Data data = noteList.get(position);
-       Intent intent = new Intent(this,NoteShow.class);
-       intent.putExtra("titleText",data.getNoteTitle());
-       intent.putExtra("id",data.getId());
-       intent.putExtra("Description",data.getNoteData());
-       startActivity(intent);
-    }
-
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-         switch (item.getItemId()){
-             case R.id.addNote:
-                 Toast.makeText(this, "You Pressed The Add Note Button", Toast.LENGTH_SHORT).show();
-                 break;
-             case R.id.notes:
-                 Toast.makeText(this, "You Pressed The Notes From Menu", Toast.LENGTH_SHORT).show();
-                 break;
-             case R.id.rateus:
-                 Toast.makeText(this, "You Pressed The Rate Us Button ", Toast.LENGTH_SHORT).show();
-                 break;
-             case R.id.shareapp:
-                 Toast.makeText(this, "You Pressed The Share App Button ", Toast.LENGTH_SHORT).show();
-                 break;
-             case R.id.logout:
-                 Toast.makeText(this, "You Pressed The Logout Button", Toast.LENGTH_SHORT).show();
-                 break;
-         }
-            return true;
-    }
 }
