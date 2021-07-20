@@ -3,8 +3,10 @@ package com.example.mynote;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 
@@ -62,9 +64,10 @@ public class NoteDatabase {
      public long deleteData(int id ){                                                                // for Delate Data;
        return  sqLiteDatabase.delete(tableName,idColumn+"=?",new String[]{id+""});
     }
-    public ArrayList<Note> getData(){
+    public ArrayList<Note> getData() {
           ArrayList<Note> noteList = new ArrayList<>();
           String [] columns = {titleColumn,idColumn,descriptionColumn};
+          try {
         Cursor cursor = sqLiteDatabase.query(tableName,columns,null,null,null,null,null);
         int titleIndex = cursor.getColumnIndex(titleColumn);
         int descriptionIndex = cursor.getColumnIndex(descriptionColumn);
@@ -76,7 +79,12 @@ public class NoteDatabase {
              note.setDescription(cursor.getString(descriptionIndex));
              note.setId(cursor.getInt(idIndex));
              noteList.add(note);
-        }
+        }}catch (SQLException exception){
+              Log.d("Sql Exception ", "getData: There Is Sql Exception");
+          }
          return noteList;
+    }
+    public void closeConnection(){
+        sqLiteDatabase.close();
     }
 }

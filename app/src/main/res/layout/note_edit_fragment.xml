@@ -60,11 +60,12 @@
 
     <Button
         android:id="@+id/buttonCancel"
-        android:layout_width="204dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:text="Cancel"
+        app:icon="@drawable/cancel_icon"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -74,11 +75,12 @@
 
     <Button
         android:id="@+id/buttonSave"
-        android:layout_width="204dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:text="Save"
+        app:icon="@drawable/save_icon"
         app:layout_constraintBottom_toBottomOf="@+id/buttonCancel"
         app:layout_constraintEnd_toStartOf="@+id/buttonCancel"
         app:layout_constraintHorizontal_bias="0.5"

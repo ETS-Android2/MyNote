@@ -5,9 +5,11 @@
         <menu >
             <item
                 android:id="@+id/settings"
+                android:icon="@drawable/settings_button"
                 android:title="Setting" />
             <item
                 android:id="@+id/deleteNotes"
+                android:icon="@drawable/delete_white_icon"
                 android:title="Delete Notes" />
         </menu>
     </item>
@@ -15,7 +17,12 @@
         <menu >
             <item
                 android:id="@+id/rateus"
+                android:icon="@drawable/ic_baseline_star_rate_24"
                 android:title="Rate Us" />
         </menu>
     </item>
+    <item
+        android:id="@+id/aboutus"
+        android:icon="@drawable/about_us"
+        android:title="About Us" />
 </menu>

@@ -12,4 +12,29 @@
         <item name="colorOnSecondary">@color/black</item>
 
     </style>
+
+    <style name="Theme.MyNote_Night" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">#7A8182</item>
+        <item name="colorPrimaryVariant">#D4C8EF</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorPrimaryDark">#D4C8EF</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">#7A8182</item>
+        <item name="colorSecondaryVariant">@color/black</item>
+        <item name="colorOnSecondary">@color/black</item>
+
+    </style>
+    <style name="Theme.MyNote_Yellow" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">#F8D200</item>
+        <item name="colorPrimaryVariant">#FCF800</item>
+        <item name="colorOnPrimary">#000000</item>
+        <item name="colorPrimaryDark">#FFC400</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">#FFC107</item>
+        <item name="colorSecondaryVariant">@color/black</item>
+        <item name="colorOnSecondary">@color/black</item>
+
+    </style>
 </resources>

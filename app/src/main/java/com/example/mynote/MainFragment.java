@@ -15,12 +15,18 @@ public class MainFragment extends Fragment {
     RecyclerView recyclerView;
     ArrayList<Note> noteList;
     Context context;
+    ForFab forFab;
     MainFragment(Context context){
         this.context = context;
     }
+    public interface ForFab{
+        void setVisibility();
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+         forFab=(ForFab) context;
     }
 
     @Override
@@ -42,5 +48,13 @@ public class MainFragment extends Fragment {
         Adapters adapter = new Adapters(noteList, context);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL));
+        registerForContextMenu(recyclerView);
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        forFab.setVisibility();
+    }
+
 }

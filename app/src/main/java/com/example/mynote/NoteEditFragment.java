@@ -1,5 +1,6 @@
 package com.example.mynote;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +13,11 @@ import androidx.fragment.app.Fragment;
 public class NoteEditFragment extends Fragment {
     Button saveButton,cancelButton;
     EditText editTextTitle,editTextDescription;
+     ForCommunication cancleButton;
     private int id;
+      NoteEditFragment(Context context){
+      cancleButton=(ForCommunication) context;
+      }
     @Override
     public void onCreate( Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,15 +44,16 @@ public class NoteEditFragment extends Fragment {
                NoteDatabase noteDatabase = new NoteDatabase(getContext());
                noteDatabase.openConnection();
                noteDatabase.doEntery(desText,title);
+                cancleButton.onCancelPressed();
             }
         });
-        if(getArguments()!=null) {
-            editTextTitle.setText( getArguments().getString("title"));
-            editTextDescription.setText(getArguments().getString("descrip"));
-            id = getArguments().getInt("id");
-        }
-        else{
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cancleButton.onCancelPressed();
+            }
+        });
 
-        }
     }
+
 }
