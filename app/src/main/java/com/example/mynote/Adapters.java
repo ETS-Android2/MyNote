@@ -4,6 +4,8 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,8 +31,9 @@ public class Adapters extends RecyclerView.Adapter<Adapters.ViewHolders> {
 
     @Override
     public void onBindViewHolder(Adapters.ViewHolders holder, int position) {
-        holder.titleTextView.setText(noteList.get(noteList.size()-position-1).getTitle());
-        holder.descriptionTextView.setText(noteList.get(noteList.size()-position-1).getDescription());
+            holder.titleTextView.setText(noteList.get(noteList.size() - position - 1).getTitle());
+            holder.descriptionTextView.setText(noteList.get(noteList.size() - position - 1).getDescription());
+
     }
 
     @Override
@@ -40,13 +43,13 @@ public class Adapters extends RecyclerView.Adapter<Adapters.ViewHolders> {
 
     public class ViewHolders extends RecyclerView.ViewHolder implements View.OnClickListener , View.OnLongClickListener{
         TextView titleTextView,descriptionTextView;
+
         public ViewHolders(View itemView) {
             super(itemView);
             titleTextView = itemView.findViewById(R.id.titleText);
             descriptionTextView = itemView.findViewById(R.id.descriptionText);
             itemView.setOnClickListener(this);
             itemView.setOnLongClickListener(this);
-
         }
 
 
@@ -65,5 +68,6 @@ public class Adapters extends RecyclerView.Adapter<Adapters.ViewHolders> {
     public interface OnItemListener{
         void onItenListen(Note note);
         void longClick(int id );
+        void setImageVisible();
     }
 }

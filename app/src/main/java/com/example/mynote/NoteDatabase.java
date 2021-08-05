@@ -29,7 +29,9 @@ public class NoteDatabase {
         databaseHelper = new DatabaseHelper(context);
         sqLiteDatabase = databaseHelper.getWritableDatabase();
     }
-   class DatabaseHelper extends SQLiteOpenHelper{
+
+
+    class DatabaseHelper extends SQLiteOpenHelper{
 
        public DatabaseHelper(@Nullable Context context) {
            super(context, dataBaseName, null, databaseVersion);
@@ -84,6 +86,10 @@ public class NoteDatabase {
           }
          return noteList;
     }
+    public void deleteAll() {
+        sqLiteDatabase.execSQL("DELETE FROM " + tableName);               //-- For Delete All The Data From The Table
+    }
+
     public void closeConnection(){
         sqLiteDatabase.close();
     }
